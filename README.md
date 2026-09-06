@@ -30,8 +30,8 @@ cambia el campo cuando cambian sus fuentes.
 |---|----------|------------------------|--------|
 | 1 | Ley de Gauss (electricidad), ∇·E = ρ/ε₀ | (b) Dipolo eléctrico (con modo carga puntual incluido) | [`dipolo.py`](./dipolo.py) |
 | 2 | Ley de Gauss (magnetismo), ∇·B = 0 | (b) Espira circular | [`gauss_magnetico.py`](./gauss_magnetico.py) |
-| 3 | Ley de Faraday, ∇×E = -∂B/∂t | (c) Transformador ideal (geometría de núcleo tipo ventana)| `faraday.py` | 
-| 4 | Ley de Ampère-Maxwell, ∇×B = μ₀J + μ₀ε₀∂E/∂t | (c) Pulso electromagnético propagándose (también sirve de ejemplo de la sección 7, "Full-system integration") | `ampere_maxwell.py` | 
+| 3 | Ley de Faraday, ∇×E = -∂B/∂t | (c) Transformador ideal (geometría de núcleo tipo ventana)| [`faraday.py`](./faraday.py) | 
+| 4 | Ley de Ampère-Maxwell, ∇×B = μ₀J + μ₀ε₀∂E/∂t | (c) Pulso electromagnético propagándose (también sirve de ejemplo de la sección 7, "Full-system integration") | [`ampere_maxwell.py`]((./ampere maxwell.py)) | 
 
 La sección 7 ("Full-system integration", derivar la ecuación de onda y verificar c = 1/√(μ₀ε₀)) queda cubierta por ampere_maxwell.py, que resuelve justamente esa ecuación de onda 1D.
 
