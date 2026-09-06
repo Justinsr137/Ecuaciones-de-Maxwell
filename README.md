@@ -3,7 +3,7 @@
 Simulaciones numéricas e interactivas (Python + NumPy + Matplotlib) que
 reconstruyen computacionalmente las cuatro ecuaciones de Maxwell.
 
-> **Autor:** Juan Pablo Diaz Gamboa -- Justin Gabriel Lozano Núñez
+> **Autores:** Juan Pablo Diaz Gamboa -- Justin Gabriel Lozano Núñez
 > **Basado en:** *Computational electrodynamics training guide — Numerical
 > analysis and simulation of Maxwell's equations* (Luz Esther González
 > Reyes, Departamento de Física, Universidad del Tolima).
@@ -30,9 +30,10 @@ cambia el campo cuando cambian sus fuentes.
 |---|----------|------------------------|--------|
 | 1 | Ley de Gauss (electricidad), ∇·E = ρ/ε₀ | (b) Dipolo eléctrico (con modo carga puntual incluido) | [`dipolo.py`](./dipolo.py) |
 | 2 | Ley de Gauss (magnetismo), ∇·B = 0 | (b) Espira circular | [`gauss_magnetico.py`](./gauss_magnetico.py) |
-| 3 | Ley de Faraday, ∇×E = -∂B/∂t | *(a) flujo magnético senoidal / (b) imán en movimiento / (c) transformador ideal* | `faraday.py` | 
-| 4 | Ley de Ampère-Maxwell, ∇×B = μ₀J + μ₀ε₀∂E/∂t | *(a) corriente DC / (b) capacitor cargándose / (c) pulso EM* | `ampere_maxwell.py` | 
+| 3 | Ley de Faraday, ∇×E = -∂B/∂t | (c) Transformador ideal (geometría de núcleo tipo ventana)| `faraday.py` | 
+| 4 | Ley de Ampère-Maxwell, ∇×B = μ₀J + μ₀ε₀∂E/∂t | (c) Pulso electromagnético propagándose (también sirve de ejemplo de la sección 7, "Full-system integration") | `ampere_maxwell.py` | 
 
+La sección 7 ("Full-system integration", derivar la ecuación de onda y verificar c = 1/√(μ₀ε₀)) queda cubierta por ampere_maxwell.py, que resuelve justamente esa ecuación de onda 1D.
 
 
 ## 3. Requisitos e instalación
@@ -62,6 +63,8 @@ notebooks de Jupyter.
 ```bash
 python dipolo.py            # Ley de Gauss — electricidad
 python gauss_magnetico.py   # Ley de Gauss — magnetismo
+python faraday.py           # Ley de Faraday — transformador ideal
+python ampere_maxwell.py    # Ley de Ampère-Maxwell — pulso EM 1D (FDTD)
 ```
 
 ### 4.1. `dipolo.py` — Ley de Gauss para la electricidad
@@ -102,6 +105,32 @@ Controles:
 - Arrastrar el mouse sobre la escena 3D rota la cámara libremente (cuando
   la rotación automática está desactivada).
 
+### 4.3. `faraday.py` — Ley de Faraday (transformador ideal)
+
+A diferencia de los tres scripts anteriores, aquí el campo NO se calcula en cada punto del espacio: se usa un modelo de circuito magnético concentrado (el modelo estándar de ingeniería para transformadores). Un núcleo tipo "ventana" (dos columnas + dos yugos) se reduce a una reluctancia Rm; las bobinas primaria y secundaria, a inductancias L1, L2 acopladas por una mutua M. Se resuelve un sistema de 2 ecuaciones diferenciales (integradas con Euler implícito) para las corrientes i1(t), i2(t), de donde se obtiene el flujo Φ(t) y su derivada dΦ/dt — la cantidad que la ley de Faraday relaciona directamente con la fem inducida: ε = -N·dΦ/dt.
+
+Las líneas de campo B (dentro del núcleo) y de E (anillos alrededor de cada columna) son curvas geométricas fijas cuya intensidad y dirección se modulan en tiempo real con los resultados del modelo de circuito — el brillo de E responde a |dΦ/dt| (no a Φ), y su sentido se invierte según el signo de dΦ/dt, aplicando explícitamente la ley de Lenz.
+
+Controles:
+
+Sliders f, V₀ (fuente en el primario), N₁, N₂ (vueltas de cada devanado), R_Carga (resistencia del secundario).
+Botones ON/OFF: Campo B, Campo E, Bobinas, Núcleo, Rotación 3D.
+Panel de datos con V1, V2, flujo Φ, dΦ/dt y las fem inducidas ε1, ε2.
+
+### 4.4. `ampere_maxwell.py` — Ley de Ampère-Maxwell (pulso EM 1D)
+
+Simula la propagación de un pulso electromagnético en 1D resolviendo las ecuaciones de Maxwell dependientes del tiempo con el método FDTD (Finite-Difference Time-Domain, algoritmo de Yee): se integran las dos leyes rotacionales acopladas, ∂Hy/∂t = -(1/μ0)·∂Ez/∂x (Faraday) y ∂Ez/∂t = (1/ε)·∂Hy/∂x (Ampère-Maxwell), sobre una malla intercalada ("staggered") de puntos para E y para H. Usa diferencias finitas de 4º orden en el interior del dominio (menor dispersión numérica que el esquema clásico de 2º orden), una fuente "suave" con envolvente tipo tanh, y una condición de frontera absorbente de Mur para que la onda salga del dominio sin reflejarse artificialmente.
+
+Incluye una interfaz entre dos medios (vacío y un medio con permitividad relativa εr ajustable) para observar transmisión y reflexión parcial —el resultado de este script es, en esencia, la solución numérica de la ecuación de onda que se deriva de combinar Faraday y Ampère-Maxwell (sección 7 "Full-system integration" de la guía), y su velocidad de propagación en el vacío debe coincidir con c = 1/√(μ₀ε₀).
+
+Controles:
+
+Sliders f, E₀ (frecuencia y amplitud de la fuente) y εr (medio) (permitividad relativa del segundo medio).
+Checkboxes: Campo eléctrico E, Campo magnético H, Vector de Poynting (E×H), Interfaz de medio, Rotación automática.
+Botones Pausa y Reiniciar.
+Panel de datos con λ, εr, velocidad e índice de refracción del medio, y los valores instantáneos de E y H.
+  
+
 ## 5. Fundamento físico resumido
 
 | Ecuación | Forma diferencial | Qué modela cada script |
@@ -137,6 +166,9 @@ cumple — que es el ejercicio central que pide la guía de la actividad.
 - **RK4 en vez de Euler** para las líneas de campo magnético: necesario
   porque una línea de B debe cerrarse sobre sí misma con buena precisión;
   un método de menor orden acumula error visible en una curva cerrada.
+ - **Euler implícito (backward Euler)** para el circuito del transformador (`faraday.py`): a diferencia de Euler explícito, es incondicionalmente estable para el sistema lineal de inductancias acopladas, lo cual importa porque el paso de tiempo del circuito es fijo y no se reajusta según la frecuencia elegida con el slider.
+ - **Diferencias finitas de 4º orden + condición de frontera de Mur** (`ampere_maxwell.py`): el esquema de 4º orden reduce la dispersión numérica (que distintas frecuencias del pulso viajarían a distinta velocidad solo por el error de discretización) frente al esquema clásico de 2º orden de Yee; la condición de Mur evita que la onda se refleje artificialmente al llegar al borde del dominio simulado, que de otro modo se comportaría como una pared en vez de un espacio abierto.
+ - **Modelo de circuito concentrado en vez de campos distribuidos** (`faraday.py`): para un núcleo de alta permeabilidad, el modelo estándar de ingeniería (reluctancia, inductancia mutua) predice correctamente tensiones, corrientes y flujo sin necesidad de resolver el campo B punto a punto dentro del hierro, y es el enfoque que se usa en la práctica para diseñar transformadores reales.
 
 ## 7. Limitaciones conocidas
 
@@ -148,6 +180,8 @@ cumple — que es el ejercicio central que pide la guía de la actividad.
   truncamiento propio de las diferencias finitas centradas (orden *h²*);
   se reporta como "aproximadamente cero" comparado con la escala típica
   del campo, no como cero exacto.
+- `faraday.py` usa un modelo de CIRCUITO CONCENTRADO (reluctancia, inductancias), válido para núcleos de alta permeabilidad donde el flujo queda esencialmente confinado; no calcula el campo B o E punto a punto dentro o fuera del núcleo, así que las líneas de campo que se ven son una representación idealizada (geometría fija, solo modulada en intensidad/dirección), no el resultado de resolver una ecuación de campo.
+- `ampere_maxwell.py` simula solo una dimensión espacial (propagación a lo largo de un eje, con E y H en las otras dos direcciones); no captura efectos 2D/3D como difracción, ni incidencia oblicua en la interfaz entre medios (solo incidencia normal).   
 - Los scripts requieren un backend gráfico interactivo local; no están
   pensados para ejecutarse "as-is" en un entorno sin interfaz gráfica
   (por ejemplo, un notebook en la nube sin `%matplotlib widget`).
