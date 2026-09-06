@@ -1,12 +1,9 @@
 # Simulaciones interactivas de las Ecuaciones de Maxwell
 
 Simulaciones numéricas e interactivas (Python + NumPy + Matplotlib) que
-reconstruyen computacionalmente las cuatro ecuaciones de Maxwell, como
-actividad de la asignatura **[Nombre del curso]** — [Nombre del programa],
-Universidad del Tolima.
+reconstruyen computacionalmente las cuatro ecuaciones de Maxwell.
 
-> **Autor(es):** [Tu nombre]
-> **Docente:** [Nombre del docente]
+> **Autor:** Juan Pablo Diaz Gamboa -- Justin Gabriel Lozano Núñez
 > **Basado en:** *Computational electrodynamics training guide — Numerical
 > analysis and simulation of Maxwell's equations* (Luz Esther González
 > Reyes, Departamento de Física, Universidad del Tolima).
@@ -29,16 +26,14 @@ cambia el campo cuando cambian sus fuentes.
 
 ## 2. Estado del repositorio
 
-| # | Ecuación | Configuración elegida | Script | Estado |
-|---|----------|------------------------|--------|--------|
-| 1 | Ley de Gauss (electricidad), ∇·E = ρ/ε₀ | (b) Dipolo eléctrico (con modo carga puntual incluido) | [`dipolo.py`](./dipolo.py) | ✅ Listo |
-| 2 | Ley de Gauss (magnetismo), ∇·B = 0 | (b) Espira circular | [`gauss_magnetico.py`](./gauss_magnetico.py) | ✅ Listo |
-| 3 | Ley de Faraday, ∇×E = -∂B/∂t | *(a) flujo magnético senoidal / (b) imán en movimiento / (c) transformador ideal* | `faraday.py` | 🔜 Próximamente |
-| 4 | Ley de Ampère-Maxwell, ∇×B = μ₀J + μ₀ε₀∂E/∂t | *(a) corriente DC / (b) capacitor cargándose / (c) pulso EM* | `ampere_maxwell.py` | 🔜 Próximamente |
+| # | Ecuación | Configuración elegida | Script | 
+|---|----------|------------------------|--------|
+| 1 | Ley de Gauss (electricidad), ∇·E = ρ/ε₀ | (b) Dipolo eléctrico (con modo carga puntual incluido) | [`dipolo.py`](./dipolo.py) |
+| 2 | Ley de Gauss (magnetismo), ∇·B = 0 | (b) Espira circular | [`gauss_magnetico.py`](./gauss_magnetico.py) |
+| 3 | Ley de Faraday, ∇×E = -∂B/∂t | *(a) flujo magnético senoidal / (b) imán en movimiento / (c) transformador ideal* | `faraday.py` | 
+| 4 | Ley de Ampère-Maxwell, ∇×B = μ₀J + μ₀ε₀∂E/∂t | *(a) corriente DC / (b) capacitor cargándose / (c) pulso EM* | `ampere_maxwell.py` | 
 
-Cuando se agreguen los scripts 3 y 4, esta tabla y las secciones 4 y 5 de
-este README se deben actualizar con su descripción, controles y capturas,
-siguiendo el mismo formato usado para los dos primeros.
+
 
 ## 3. Requisitos e instalación
 
@@ -143,17 +138,7 @@ cumple — que es el ejercicio central que pide la guía de la actividad.
   porque una línea de B debe cerrarse sobre sí misma con buena precisión;
   un método de menor orden acumula error visible en una curva cerrada.
 
-## 7. Entregables de la actividad (según la guía)
-
-Según la sección "Expected deliverables" de la guía, además del código se
-debe entregar un informe/póster que incluya: (1) fundamento teórico,
-(2) metodología numérica, (3) resultados gráficos, (4) interpretación,
-(5) limitaciones del modelo y (6) relación con sistemas fotónicos. Este
-repositorio cubre los puntos (2) y (3) (metodología numérica y resultados
-gráficos/interactivos); los puntos (1), (4), (5) y (6) se desarrollan en el
-informe/póster que acompaña esta entrega.
-
-## 8. Limitaciones conocidas
+## 7. Limitaciones conocidas
 
 - Los campos se modelan con fuentes idealizadas (carga puntual, alambre
   filamentar): no incluyen efectos de tamaño finito, materiales, ni
@@ -167,7 +152,7 @@ informe/póster que acompaña esta entrega.
   pensados para ejecutarse "as-is" en un entorno sin interfaz gráfica
   (por ejemplo, un notebook en la nube sin `%matplotlib widget`).
 
-## 9. Licencia
+## 8. Licencia
 
-[Especificar aquí, por ejemplo MIT License, o "Uso académico —
-Universidad del Tolima"]
+"Uso académico —
+Universidad del Tolima"
